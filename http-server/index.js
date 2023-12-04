@@ -1,19 +1,22 @@
 const express = require('express');
 const path = require('path');
-const argv = require('minimist')(process.argv.slice(2));
 
 const app = express();
+const port = process.argv[2] || 3000; // Default port 3000 if not provided
 
-// Set up the route for /registration to serve registration.html
-app.get('/registration', (req, res) => {
-  res.sendFile(path.join(__dirname, 'http-server', 'registration.html'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
-// Serve static files from the http-server folder
-app.use(express.static(path.join(__dirname, 'http-server')));
+app.get('/project', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'project.html'));
+});
 
-// Define the port using the command line argument or default to 3000
-const port = argv.port || 3000;
+app.get('/registration', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'registration.html'));
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
